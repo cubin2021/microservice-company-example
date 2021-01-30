@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ciber
+server:
+  port: 2000
+eureka:
+  instance:
+    hostname: ciber
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://eureka:1000/eureka/
+

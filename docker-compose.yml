@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=demo
+    ports:
+      - 3306:3306
+
+  ciber:
+    image: ciber
+    ports:
+      - 2000:2000
+    environment:
+      spring_datasource_url: jdbc:mysql://db:3306/demo
+      spring_datasource_username: root
+      spring_datasource_password: root
+    build:
+      context: ./ciber
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+
+  eureka:
+    image: eureka
+    build:
+      context: ./eureka
+      dockerfile: ./Dockerfile
+    ports:
+      - 1000:1000
+
+  gateway:
+    image: gateway
+    ports:
+      - 3000:3000
+    environment:
+      spring_datasource_url: jdbc:mysql://db:3306/demo
+      spring_datasource_username: root
+      spring_datasource_password: root
+    build:
+      context: ./gateway
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+
+
+  global:
+    image: global
+    ports:
+      - 4000:4000
+    environment:
+      spring_datasource_url: jdbc:mysql://db:3306/demo
+      spring_datasource_username: root
+      spring_datasource_password: root
+    build:
+      context: ./global
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
